@@ -27,7 +27,7 @@ router.post('/', authenticate, async (req, res) => {
       currency: order.currency,
       receipt: order.receipt,
       status: order.status,
-      created_at: order.createdAt.toISOString()
+      created_at: order.created_at
     });
   } catch (error) {
     console.error('Create order error:', error);
@@ -65,7 +65,7 @@ router.get('/:orderId', authenticate, async (req, res) => {
       currency: order.currency,
       receipt: order.receipt,
       status: order.status,
-      created_at: order.createdAt.toISOString()
+      created_at: order.created_at
     });
   } catch (error) {
     console.error('Get order error:', error);
@@ -83,7 +83,7 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { merchantId: req.merchant.id },
-      order: [['createdAt', 'DESC']]
+      order: [['created_at', 'DESC']]
     });
     
     const orderList = orders.map(order => ({
@@ -92,7 +92,7 @@ router.get('/', authenticate, async (req, res) => {
       currency: order.currency,
       receipt: order.receipt,
       status: order.status,
-      created_at: order.createdAt.toISOString()
+      created_at: order.created_at
     }));
     
     res.json({

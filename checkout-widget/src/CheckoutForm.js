@@ -88,6 +88,7 @@ function CheckoutForm() {
           <div className="payment-methods">
             <button
               type="button"
+              data-test-id="payment-method-card"
               className={paymentMethod === 'card' ? 'active' : ''}
               onClick={() => setPaymentMethod('card')}
             >
@@ -95,6 +96,7 @@ function CheckoutForm() {
             </button>
             <button
               type="button"
+              data-test-id="payment-method-upi"
               className={paymentMethod === 'upi' ? 'active' : ''}
               onClick={() => setPaymentMethod('upi')}
             >
@@ -102,6 +104,7 @@ function CheckoutForm() {
             </button>
             <button
               type="button"
+              data-test-id="payment-method-netbanking"
               className={paymentMethod === 'netbanking' ? 'active' : ''}
               onClick={() => setPaymentMethod('netbanking')}
             >
@@ -113,6 +116,7 @@ function CheckoutForm() {
             <div className="card-details">
               <input
                 type="text"
+                data-test-id="card-number-input"
                 placeholder="Card Number"
                 value={cardNumber}
                 onChange={(e) => setCardNumber(e.target.value)}
@@ -122,6 +126,7 @@ function CheckoutForm() {
               <div className="card-row">
                 <input
                   type="text"
+                  data-test-id="card-expiry-input"
                   placeholder="MM/YY"
                   value={cardExpiry}
                   onChange={(e) => setCardExpiry(e.target.value)}
@@ -130,6 +135,7 @@ function CheckoutForm() {
                 />
                 <input
                   type="text"
+                  data-test-id="card-cvv-input"
                   placeholder="CVV"
                   value={cardCvv}
                   onChange={(e) => setCardCvv(e.target.value)}
@@ -144,6 +150,7 @@ function CheckoutForm() {
             <div className="upi-details">
               <input
                 type="text"
+                data-test-id="upi-id-input"
                 placeholder="UPI ID (e.g., user@upi)"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
@@ -152,7 +159,7 @@ function CheckoutForm() {
             </div>
           )}
 
-          <button type="submit" className="pay-button" disabled={loading}>
+          <button type="submit" className="pay-button" disabled={loading} data-test-id="submit-payment-btn">
             {loading ? 'Processing...' : `Pay ₹${(amount / 100).toFixed(2)}`}
           </button>
         </form>

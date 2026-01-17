@@ -77,7 +77,7 @@ router.post('/', authenticate, async (req, res) => {
       method: payment.method,
       ...(payment.vpa && { vpa: payment.vpa }),
       status: payment.status,
-      created_at: payment.createdAt.toISOString()
+      created_at: payment.created_at
     };
     
     // Store idempotency key
@@ -130,8 +130,8 @@ router.get('/:paymentId', authenticate, async (req, res) => {
       ...(payment.vpa && { vpa: payment.vpa }),
       status: payment.status,
       captured: payment.captured,
-      created_at: payment.createdAt.toISOString(),
-      ...(payment.updatedAt && { updated_at: payment.updatedAt.toISOString() }),
+      created_at: payment.created_at,
+      ...(payment.updated_at && { updated_at: payment.updated_at }),
       ...(payment.errorCode && {
         error_code: payment.errorCode,
         error_description: payment.errorDescription
@@ -189,8 +189,8 @@ router.post('/:paymentId/capture', authenticate, async (req, res) => {
       method: payment.method,
       status: payment.status,
       captured: payment.captured,
-      created_at: payment.createdAt.toISOString(),
-      updated_at: payment.updatedAt.toISOString()
+      created_at: payment.created_at,
+      updated_at: payment.updated_at
     });
   } catch (error) {
     console.error('Capture payment error:', error);
@@ -208,7 +208,7 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const payments = await Payment.findAll({
       where: { merchantId: req.merchant.id },
-      order: [['createdAt', 'DESC']]
+      order: [['created_at', 'DESC']]
     });
     
     const paymentList = payments.map(payment => ({
@@ -218,7 +218,7 @@ router.get('/', authenticate, async (req, res) => {
       currency: payment.currency,
       method: payment.method,
       status: payment.status,
-      created_at: payment.createdAt.toISOString()
+      created_at: payment.created_at
     }));
     
     res.json({

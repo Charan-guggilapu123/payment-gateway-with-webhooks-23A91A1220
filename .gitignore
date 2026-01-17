@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+
+# Build outputs and caches
+build/
+dist/
+.tmp/
+temp/
+out/
+.cache/
+
+# Dependency directories
+node_modules/
+
+# Environment files
+.env
+.env.*
+.env.local
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Docker / Compose
+docker-compose.override.yml
+*.tar
+
+# Frontend app build folders (explicit)
+dashboard/build/
+checkout-widget/build/

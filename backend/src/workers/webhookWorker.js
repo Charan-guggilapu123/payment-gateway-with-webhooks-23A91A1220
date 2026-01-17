@@ -51,13 +51,20 @@ const webhookWorker = async (job) => {
       
       if (response.status >= 200 && response.status < 300) {
         webhookLog.status = 'success';
-        console.log(`Webhook delivered successfully: ${webhookLogId}`);
+        console.log(`✓ Webhook delivered successfully: ${webhookLogId}`);
       } else {
         handleFailedDelivery(webhookLog);
       }
     } catch (error) {
       webhookLog.responseCode = error.response?.status || null;
       webhookLog.responseBody = error.message.substring(0, 1000);
+      console.error(`✗ Webhook delivery failed for ${webhookLogId}: ${error.message}`);
+      if (error.code) {
+        console.error(`  Error code: ${error.code}`);
+      }
+      if (error.errno) {
+        console.error(`  errno: ${error.errno}`);
+      }
       handleFailedDelivery(webhookLog);
     }
     

@@ -6,13 +6,14 @@ const API_KEY = 'key_test_abc123';
 const API_SECRET = 'secret_test_xyz789';
 
 function Webhooks() {
-  const [webhookUrl, setWebhookUrl] = useState('https://api.example.com/payments/webhook');
+  const [webhookUrl, setWebhookUrl] = useState('http://host.docker.internal:4000/webhook');
   const [webhookSecret, setWebhookSecret] = useState('whsec_test_abc123');
   const [webhooks, setWebhooks] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchWebhooks();
+    loadWebhookConfig();
   }, []);
 
   const fetchWebhooks = async () => {
@@ -29,6 +30,27 @@ function Webhooks() {
     }
   };
 
+  const loadWebhookConfig = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/v1/webhooks/config`, {
+        headers: {
+          'X-Api-Key': API_KEY,
+          'X-Api-Secret': API_SECRET
+        }
+      });
+      if (response.data.data) {
+        if (response.data.data.url) {
+          setWebhookUrl(response.data.data.url);
+        }
+        if (response.data.data.secret) {
+          setWebhookSecret(response.data.data.secret);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading webhook config:', error);
+    }
+  };
+
   const handleSaveWebhook = async (e) => {
     e.preventDefault();
     if (!webhookUrl) {
@@ -37,13 +59,24 @@ function Webhooks() {
     }
     try {
       setLoading(true);
-      // Store webhook configuration locally
-      localStorage.setItem('webhookUrl', webhookUrl);
-      localStorage.setItem('webhookSecret', webhookSecret);
-      alert('✓ Webhook URL saved: ' + webhookUrl);
+      // Save to backend
+      const response = await axios.post(
+        `${API_URL}/api/v1/webhooks/config`,
+        { url: webhookUrl },
+        {
+          headers: {
+            'X-Api-Key': API_KEY,
+            'X-Api-Secret': API_SECRET
+          }
+        }
+      );
+      
+      if (response.data.success) {
+        alert('✓ Webhook URL saved: ' + webhookUrl);
+      }
     } catch (error) {
       console.error('Error saving webhook:', error);
-      alert('Error saving webhook configuration');
+      alert('Error saving webhook configuration: ' + (error.response?.data?.error?.description || error.message));
     } finally {
       setLoading(false);
     }

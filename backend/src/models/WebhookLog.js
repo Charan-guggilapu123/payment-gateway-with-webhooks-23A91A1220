@@ -16,6 +16,10 @@ const WebhookLog = sequelize.define('WebhookLog', {
     type: DataTypes.STRING(50),
     allowNull: false
   },
+  url: {
+    type: DataTypes.STRING(500),
+    allowNull: false
+  },
   payload: {
     type: DataTypes.JSONB,
     allowNull: false
